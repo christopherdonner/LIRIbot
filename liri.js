@@ -27,17 +27,23 @@ if(action==="movie-this"){
   {
     var title=[]
 
-    for(i=3;i<process.argv.length-1;i++)
+    for(i=3;i<process.argv.length;i++)
       {
         title.push(process.argv[i])
       }
     console.log(title)
-    axios.get(`http://www.omdbapi.com/?t="${title}"&y=&plot=short&apikey=trilogy`).then(
-      function(response) 
-      {
-        // Then we print out the imdbRating
-        console.log(response.data);
-      });
+    // axios.get(`http://www.omdbapi.com/?t="${title}"&y=&plot=short&apikey=trilogy`).then(
+    //   function(response) 
+    //   {
+    //     // Then we print out the imdbRating
+    //     console.log(response.data);
+    //   });
+    request(`http://www.omdbapi.com/?t="${title}"&y=&plot=short&apikey=trilogy`, function(error, response, body){
+        console.log(body)
+        var omdbResponse=JSON.parse(body)
+        console.log(omdbResponse)
+        console.log(omdbResponse.Title)
+    })
   }
 }
 
