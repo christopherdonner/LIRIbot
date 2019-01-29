@@ -8,12 +8,15 @@ var spotifyAuth = require("./keys.js")
 var Spotify = require('node-spotify-api');
 var request = require('request');
 
-var logLine=[]
+var http = require("http");
+
+var logLine=""
 
 var spotifyClientID="505db673f406470fbab1ec11f47c60ef"
 var spotifyClientSecret="404f95a51fe74453971b96e22238a871"
+var redirectURI="http://localhost:8888"
 
-
+console.log(process.argv)
 //var spotify = new Spotify(keys.spotify);
 
 console.log(process.argv[2]);
@@ -23,6 +26,7 @@ console.log(action)
 function writeLog(){
   fs.appendFile("log.txt", logLine, function(err) {
   })
+  logLine=""
   }
 
 /*
@@ -32,6 +36,15 @@ movie-this
 do-what-it-says
 */
 
+
+//spotify-this
+if(action==="spotify-this"){
+http.createServer(function(request, response) {
+  response.writeHead(200, {"Content-Type": "text/plain"});
+  response.write("Hello World");
+  response.end();
+}).listen(8888);
+}
 
 //concert-this
 if(action==="concert-this"){
@@ -69,8 +82,9 @@ if(action==="movie-this"){
         var omdbResponse=JSON.parse(body);
         console.log(omdbResponse);
         console.log(omdbResponse.Title);
+        logLine=`${action}: ${title} => ${omdbResponse.Title}`
+        writeLog();
     })
-    writeLog();
   }
 }
 
